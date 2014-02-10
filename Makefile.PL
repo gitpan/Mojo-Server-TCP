@@ -6,13 +6,10 @@ WriteMakefile(
   AUTHOR => 'Jan Henning Thorsen <jhthorsen@cpan.org>',
   LICENSE => 'perl',
   PREREQ_PM => {
-    'IO::Socket::SSL' => '1.962',
-    'Net::SSLeay' => '1.55',
-    'URI' => '1.60',
-    'URI::Escape' => '3.31',
+    'Mojolicious' => '4.60',
   },
   BUILD_REQUIRES => {
-
+    'Test::More' => '0.90',
   },
   META_MERGE => {
     resources => {

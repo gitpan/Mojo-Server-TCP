@@ -2,7 +2,8 @@
 abstract: 'Generic TCP server'
 author:
   - 'Jan Henning Thorsen <jhthorsen@cpan.org>'
-build_requires: {}
+build_requires:
+  Test::More: 0.90
 configure_requires:
   ExtUtils::MakeMaker: 0
 dynamic_config: 1
@@ -17,13 +18,10 @@ no_index:
     - t
     - inc
 requires:
-  IO::Socket::SSL: 1.962
-  Net::SSLeay: 1.55
-  URI: 1.60
-  URI::Escape: 3.31
+  Mojolicious: 4.60
 resources:
   bugtracker: https://github.com/jhthorsen/mojo-server-tcp/issues
   homepage: https://metacpan.org/release/Mojo-Server-TCP
   license: http://dev.perl.org/licenses/
   repository: https://github.com/jhthorsen/mojo-server-tcp.git
-version: 0.01
+version: 0.02

@@ -1,4 +1,7 @@
 Revision history for Mojo-Server-TCP
 
+0.02     Mon Feb 10 21:28:31 2014
+       * Fix dependencies list
+
 0.01     Mon Feb 10 20:36:15 2014
        * Started project

@@ -2,7 +2,7 @@ NAME
     Mojo::Server::TCP - Generic TCP server
 
 VERSION
-    0.01
+    0.02
 
 SYNOPSIS
       use Mojo::Server::TCP;
