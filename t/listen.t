@@ -4,11 +4,11 @@ use Mojo::IOLoop;
 use Mojo::Server::TCP;
 use Test::More;
 
-my $port = Mojo::IOLoop->generate_port;
-my($id, $tcp);
+my($id, $port, $tcp);
 
 {
   $tcp = Mojo::Server::TCP->new;
+  $port = Mojo::IOLoop->generate_port or plan skip_all => 'Could not generate_port()';
 
   is $tcp->listen(["tcp://localhost:$port"]), $tcp, "listen() $port";
   is $tcp->start, $tcp, 'start()';
@@ -22,12 +22,14 @@ my($id, $tcp);
   $tcp->on(connect => sub { push @event, connect => @_; });
   $tcp->on(close => sub { push @event, close => @_; Mojo::IOLoop->stop });
   $tcp->on(read => sub { push @event, read => @_; });
+  $tcp->on(error => sub { push @event, error => @_; });
 
   Mojo::IOLoop->client(
     { port => $port },
     sub {
       my($loop, $err, $stream) = @_;
       diag $err || 'Connected to TCP server';
+      return if $err;
       @sig = @SIG{qw( INT TERM )};
       $stream->write("too cool o/ æøå!", sub { shift->close; });
     },

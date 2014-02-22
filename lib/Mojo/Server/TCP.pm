@@ -6,7 +6,7 @@ Mojo::Server::TCP - Generic TCP server
 
 =head1 VERSION
 
-0.02
+0.0201
 
 =head1 SYNOPSIS
 
@@ -32,7 +32,7 @@ use Mojo::Loader;
 use Mojo::URL;
 use constant DEBUG => $ENV{MOJO_SERVER_DEBUG} ? 1 : 0;
 
-our $VERSION = '0.02';
+our $VERSION = '0.0201';
 
 =head1 EVENTS
 
@@ -54,7 +54,7 @@ Emitted safely if the stream gets closed.
 
 =head2 read
 
-  $self->on(error => sub { my($self, $id, $chunk, $stream) = @_ });
+  $self->on(read => sub { my($self, $id, $chunk, $stream) = @_ });
 
 Emitted safely if new data arrives on the stream.
 
