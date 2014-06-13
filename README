@@ -2,15 +2,15 @@ NAME
     Mojo::Server::TCP - Generic TCP server
 
 VERSION
-    0.0201
+    0.03
 
 SYNOPSIS
       use Mojo::Server::TCP;
       my $echo = Mojo::Server::TCP->new(listen => ['tcp//*:9000']);
 
       $echo->on(read => sub {
-        my($echo, $id, $chunk, $stream) = @_;
-        $stream->write($chunk);
+        my($echo, $id, $bytes, $stream) = @_;
+        $stream->write($bytes);
       });
 
       $echo->start;
@@ -21,42 +21,64 @@ DESCRIPTION
 
 EVENTS
   connect
-      $self->on(close => sub { my($self, $id) = @_ });
+      $self->on(connect => sub { my($self, $id) = @_ });
 
-    Emitted safely when a new client connects to the server.
+    Emitted safely when a new client connects to the server. $id is a unique
+    string used to identify the connection.
 
   close
       $self->on(close => sub { my($self, $id) = @_ });
 
-    Emitted safely if the stream gets closed.
+    Emitted safely if the stream gets closed. $id is a unique string used to
+    identify the connection.
 
   error
       $self->on(error => sub { my($self, $id, $str) = @_ });
 
-  read
-      $self->on(read => sub { my($self, $id, $chunk, $stream) = @_ });
+    $id is a unique string used to identify the connection and $err holds
+    the error message.
 
-    Emitted safely if new data arrives on the stream.
+  read
+      $self->on(read => sub { my($self, $id, $bytes, $stream) = @_ });
+
+    Emitted safely if new data arrives on the stream. $id is a unique string
+    used to identify the connection. $bytes holds the incoming data and
+    $stream is a Mojo::IOLoop::Stream object you can use to respond back to
+    the client.
+
+    The $stream object can also be retrived in your code using this code:
+
+      $stream = $self->ioloop->stream($id);
+
+    It is much safer to avoid memory leaks to pass $id around instead of the
+    $stream object.
 
   timeout
-      $self->on(timeout => sub { my($self, $stream) = @_ });
+      $self->on(timeout => sub { my($self, $id) = @_ });
 
     Emitted safely if the stream has been inactive for too long and will get
-    closed automatically.
+    closed automatically. $id is a unique string used to identify the
+    connection.
 
 ATTRIBUTES
-  server_class
-      $str = $daemon->server_class;
-      $self = $self->server_class('Mojo::Server::Prefork');
+  ioloop
+      $ioloop = $self->ioloop;
+      $self = $self->ioloop(Mojo::IOLoop->new);
 
-    Used to set a custom server class. The default is Mojo::Server::Daemon.
-    Check out Mojo::Server::Prefork if you want a faster server.
+    Returns the Mojo::IOLoop object.
 
   listen
       $array_ref = $self->listen;
       $self = $self->listen(['tcp://localhost:3000']);
 
     List of one or more locations to listen on, defaults to "tcp://*:3000".
+
+  server_class
+      $str = $daemon->server_class;
+      $self = $self->server_class('Mojo::Server::Prefork');
+
+    Used to set a custom server class. The default is Mojo::Server::Daemon.
+    Check out Mojo::Server::Prefork if you want a faster server.
 
 METHODS
   run

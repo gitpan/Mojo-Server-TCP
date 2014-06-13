@@ -6,7 +6,7 @@ Mojo::Server::TCP - Generic TCP server
 
 =head1 VERSION
 
-0.0201
+0.03
 
 =head1 SYNOPSIS
 
@@ -14,8 +14,8 @@ Mojo::Server::TCP - Generic TCP server
   my $echo = Mojo::Server::TCP->new(listen => ['tcp//*:9000']);
 
   $echo->on(read => sub {
-    my($echo, $id, $chunk, $stream) = @_;
-    $stream->write($chunk);
+    my($echo, $id, $bytes, $stream) = @_;
+    $stream->write($bytes);
   });
 
   $echo->start;
@@ -32,40 +32,70 @@ use Mojo::Loader;
 use Mojo::URL;
 use constant DEBUG => $ENV{MOJO_SERVER_DEBUG} ? 1 : 0;
 
-our $VERSION = '0.0201';
+our $VERSION = '0.03';
 
 =head1 EVENTS
 
 =head2 connect
 
-  $self->on(close => sub { my($self, $id) = @_ });
+  $self->on(connect => sub { my($self, $id) = @_ });
 
 Emitted safely when a new client connects to the server.
+C<$id> is a unique string used to identify the connection.
 
 =head2 close
 
   $self->on(close => sub { my($self, $id) = @_ });
 
 Emitted safely if the stream gets closed.
+C<$id> is a unique string used to identify the connection.
 
 =head2 error
 
   $self->on(error => sub { my($self, $id, $str) = @_ });
 
+C<$id> is a unique string used to identify the connection and C<$err>
+holds the error message.
+
 =head2 read
 
-  $self->on(read => sub { my($self, $id, $chunk, $stream) = @_ });
+  $self->on(read => sub { my($self, $id, $bytes, $stream) = @_ });
 
 Emitted safely if new data arrives on the stream.
+C<$id> is a unique string used to identify the connection. C<$bytes> holds the
+incoming data and C<$stream> is a L<Mojo::IOLoop::Stream> object you can use
+to respond back to the client.
+
+The C<$stream> object can also be retrived in your code using this code:
+
+  $stream = $self->ioloop->stream($id);
+
+It is much safer to avoid memory leaks to pass C<$id> around instead of the
+C<$stream> object.
 
 =head2 timeout
 
-  $self->on(timeout => sub { my($self, $stream) = @_ });
+  $self->on(timeout => sub { my($self, $id) = @_ });
 
 Emitted safely if the stream has been inactive for too long and will get
 closed automatically.
+C<$id> is a unique string used to identify the connection.
 
 =head1 ATTRIBUTES
+
+=head2 ioloop
+
+  $ioloop = $self->ioloop;
+  $self = $self->ioloop(Mojo::IOLoop->new);
+
+Returns the L<Mojo::IOLoop> object.
+
+=head2 listen
+
+  $array_ref = $self->listen;
+  $self = $self->listen(['tcp://localhost:3000']);
+
+List of one or more locations to listen on, defaults to "tcp://*:3000".
 
 =head2 server_class
 
@@ -75,17 +105,11 @@ closed automatically.
 Used to set a custom server class. The default is L<Mojo::Server::Daemon>.
 Check out L<Mojo::Server::Prefork> if you want a faster server.
 
-=head2 listen
-
-  $array_ref = $self->listen;
-  $self = $self->listen(['tcp://localhost:3000']);
-
-List of one or more locations to listen on, defaults to "tcp://*:3000".
-
 =cut
 
-has server_class => 'Mojo::Server::Daemon';
+sub ioloop { shift->_server->ioloop(@_); }
 has listen => sub { ['tcp://*:3000']; };
+has server_class => 'Mojo::Server::Daemon';
 has _server => sub {
   my $self = shift;
   my $e = Mojo::Loader->new->load($self->server_class);

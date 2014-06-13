@@ -1,5 +1,9 @@
 Revision history for Mojo-Server-TCP
 
+0.03     Fri Jun 13 11:44:51 2014
+       * Improved documentation
+       * Mojolicious 5.0 compatible
+
 0.0201   Sat Feb 22 10:03:23 2014
        * Try to fix failing t/listen.t test
 

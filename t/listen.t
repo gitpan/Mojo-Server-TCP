@@ -8,7 +8,7 @@ my($id, $port, $tcp);
 
 {
   $tcp = Mojo::Server::TCP->new;
-  $port = Mojo::IOLoop->generate_port or plan skip_all => 'Could not generate_port()';
+  $port = Mojo::IOLoop::Server->generate_port or plan skip_all => 'Could not generate_port()';
 
   is $tcp->listen(["tcp://localhost:$port"]), $tcp, "listen() $port";
   is $tcp->start, $tcp, 'start()';

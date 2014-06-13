@@ -24,4 +24,4 @@ resources:
   homepage: https://metacpan.org/release/Mojo-Server-TCP
   license: http://dev.perl.org/licenses/
   repository: https://github.com/jhthorsen/mojo-server-tcp.git
-version: 0.0201
+version: 0.03
