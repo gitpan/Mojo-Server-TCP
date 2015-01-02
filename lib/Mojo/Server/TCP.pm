@@ -6,7 +6,7 @@ Mojo::Server::TCP - Generic TCP server
 
 =head1 VERSION
 
-0.03
+0.04
 
 =head1 SYNOPSIS
 
@@ -32,7 +32,7 @@ use Mojo::Loader;
 use Mojo::URL;
 use constant DEBUG => $ENV{MOJO_SERVER_DEBUG} ? 1 : 0;
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 =head1 EVENTS
 
@@ -197,14 +197,14 @@ sub _listen {
     $options => sub {
       my ($loop, $stream, $id) = @_;
 
-      $self->emit_safe(connect => $id);
+      $self->emit(connect => $id);
  
       warn "-- Accept (@{[$stream->handle->peerhost]})\n" if DEBUG;
       $stream->timeout($self->_server->inactivity_timeout);
-      $stream->on(close => sub { $self->emit_safe(close => $id); });
-      $stream->on(error => sub { $self and $self->emit_safe(error => $id, $_[1]); });
-      $stream->on(read => sub { $self->emit_safe(read => $id, $_[1], $_[0]); });
-      $stream->on(timeout => sub { $self->emit_safe(timeout => $id); });
+      $stream->on(close => sub { $self->emit(close => $id); });
+      $stream->on(error => sub { $self and $self->emit(error => $id, $_[1]); });
+      $stream->on(read => sub { $self->emit(read => $id, $_[1], $_[0]); });
+      $stream->on(timeout => sub { $self->emit(timeout => $id); });
     }
   );
 }

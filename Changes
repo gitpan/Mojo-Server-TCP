@@ -1,5 +1,8 @@
 Revision history for Mojo-Server-TCP
 
+0.04     Fri Jan  2 12:53:27 2015
+       * Replace deprecated emit_safe() with emit()
+
 0.03     Fri Jun 13 11:44:51 2014
        * Improved documentation
        * Mojolicious 5.0 compatible
