@@ -32,7 +32,7 @@
       },
       "runtime" : {
          "requires" : {
-            "perl" : "0"
+            "Mojolicious" : "5.48"
          }
       }
    },
@@ -46,5 +46,5 @@
          "url" : "https://github.com/jhthorsen/mojo-server-tcp.git"
       }
    },
-   "version" : "0.04"
+   "version" : "0.05"
 }

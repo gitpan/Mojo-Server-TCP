@@ -6,7 +6,7 @@ Mojo::Server::TCP - Generic TCP server
 
 =head1 VERSION
 
-0.04
+0.05
 
 =head1 SYNOPSIS
 
@@ -32,7 +32,7 @@ use Mojo::Loader;
 use Mojo::URL;
 use constant DEBUG => $ENV{MOJO_SERVER_DEBUG} ? 1 : 0;
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 =head1 EVENTS
 

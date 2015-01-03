@@ -18,9 +18,9 @@ no_index:
     - t
     - inc
 requires:
-  perl: 0
+  Mojolicious: 5.48
 resources:
   bugtracker: https://github.com/jhthorsen/mojo-server-tcp/issues
   homepage: https://github.com/jhthorsen/mojo-server-tcp
   repository: https://github.com/jhthorsen/mojo-server-tcp.git
-version: 0.04
+version: 0.05

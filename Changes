@@ -1,5 +1,8 @@
 Revision history for Mojo-Server-TCP
 
+0.05     Sat Jan  3 10:32:20 2015
+       * Add missing dependencies
+
 0.04     Fri Jan  2 12:53:27 2015
        * Replace deprecated emit_safe() with emit()
 
